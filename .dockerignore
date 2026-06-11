@@ -1,0 +1,19 @@
+# Keep the build context small and avoid copying host-only / generated artifacts.
+# NOTE: frontend/dist is intentionally ignored — it is rebuilt inside the image
+# (stage 1) so a stale host build never leaks into the container.
+**/node_modules
+**/.venv
+venv
+**/__pycache__
+**/*.pyc
+**/*.pyo
+.git
+.gitignore
+data
+**/dist
+*.db
+*.sqlite
+*.sqlite3
+.env
+.DS_Store
+*.log

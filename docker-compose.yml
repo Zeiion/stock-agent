@@ -1,0 +1,36 @@
+# Stock Agent — single-service deployment.
+#
+# Usage:
+#   1. Create a .env file (see caveats below).
+#   2. docker compose up -d --build
+#   3. Open http://localhost:8848
+#
+# AI provider caveat (IMPORTANT):
+#   The `claude` / `codex` AI tiers are HOST CLIs and CANNOT run inside the container.
+#   In Docker you must use the Anthropic API tier — put these in .env:
+#       AI_PROVIDER=anthropic
+#       ANTHROPIC_API_KEY=sk-ant-...
+#   Data sources (akshare / yfinance) need only outbound network, which works in Docker.
+
+services:
+  stockagent:
+    build: .
+    image: stock-agent:latest
+    container_name: stockagent
+    ports:
+      - "8848:8848"
+    # Loads ANTHROPIC_API_KEY, AI_PROVIDER, push tokens, etc. from .env
+    env_file:
+      - .env
+    environment:
+      # Persist the SQLite DB onto the mounted volume below.
+      DB_PATH: /app/data/stockagent.db
+      # Bind inside the container so the published port works.
+      HOST: 0.0.0.0
+      PORT: "8848"
+      # CLI tiers are unavailable in-container; default to the Anthropic API tier.
+      AI_PROVIDER: anthropic
+    volumes:
+      # Host ./data holds the SQLite DB so it survives container rebuilds.
+      - ./data:/app/data
+    restart: unless-stopped

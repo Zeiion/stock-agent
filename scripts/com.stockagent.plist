@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  macOS launchd LaunchAgent template for Stock Agent.
+
+  HOW TO USE:
+    1. Replace every <!-- placeholder ... --> path below with absolute paths on
+       your machine (no ~ , no env vars — launchd does not expand them here).
+         <!-- VENV_PYTHON -->   = /Users/<you>/Documents/Code/ai/stock-agent/.venv/bin/python
+         <!-- BACKEND_DIR -->   = /Users/<you>/Documents/Code/ai/stock-agent/backend
+         <!-- LOG_DIR -->       = /Users/<you>/Documents/Code/ai/stock-agent/data
+    2. Copy to ~/Library/LaunchAgents/com.stockagent.plist
+    3. Load it:    launchctl load -w ~/Library/LaunchAgents/com.stockagent.plist
+       Unload it:  launchctl unload  ~/Library/LaunchAgents/com.stockagent.plist
+
+  Runs the backend via the venv python (`python -m app`) from the backend dir,
+  restarts on crash (KeepAlive), and starts at login (RunAtLoad).
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.stockagent</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string><!-- VENV_PYTHON: /ABS/PATH/stock-agent/.venv/bin/python --></string>
+        <string>-m</string>
+        <string>app</string>
+    </array>
+
+    <!-- Run `python -m app` from the backend/ directory so `app` is importable. -->
+    <key>WorkingDirectory</key>
+    <string><!-- BACKEND_DIR: /ABS/PATH/stock-agent/backend --></string>
+
+    <!-- Optional: ensure Homebrew / CLI tools (claude, codex, pnpm) are on PATH. -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string><!-- LOG_DIR: /ABS/PATH/stock-agent/data -->/stockagent.out.log</string>
+
+    <key>StandardErrorPath</key>
+    <string><!-- LOG_DIR: /ABS/PATH/stock-agent/data -->/stockagent.err.log</string>
+</dict>
+</plist>
