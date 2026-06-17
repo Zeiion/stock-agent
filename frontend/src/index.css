@@ -146,6 +146,23 @@ button.tiny {
   padding: 3px 7px;
   font-size: 11px;
 }
+/* tactile press — physical "push" on click */
+button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+/* keyboard focus ring (mouse clicks stay clean) */
+button:focus-visible,
+.tabs button:focus-visible,
+.seg button:focus-visible,
+.chip:focus-visible,
+.mkt-chip:focus-visible,
+.toggle:focus-visible,
+a.exp-link:focus-visible,
+a.news-item:focus-visible,
+.watch-row:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
 
 input,
 select {
@@ -1600,3 +1617,22 @@ a.exp-link:hover { color: var(--text); border-color: var(--accent-dim); }
 }
 
 .muted { color: var(--text-faint); }
+
+/* =========================================================================
+   Reduced motion — collapse the pulse / spinner / flash / toast animations
+   for users who ask the OS for less movement. (mandatory a11y guard)
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .dot.on {
+    animation: none;
+    box-shadow: 0 0 6px var(--up);
+  }
+}
