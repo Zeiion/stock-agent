@@ -63,6 +63,13 @@ body,
   margin: 0;
 }
 
+html {
+  /* keep our own type scale on rotate; kill the blue tap flash on touch */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
 body {
   font-family: var(--sans);
   background: var(--bg);
@@ -669,16 +676,31 @@ input::placeholder {
   top: 0;
   background: var(--bg-1);
   z-index: 3;
+  /* a single scrollable row — never wrap the 11 tabs onto two lines */
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  scrollbar-width: none;
+  /* soft right-edge fade hints there's more to scroll */
+  -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 26px), transparent);
+  mask-image: linear-gradient(90deg, #000 calc(100% - 26px), transparent);
+}
+.tabs::-webkit-scrollbar {
+  height: 0;
 }
 .tabs button {
-  flex: 1;
+  flex: 0 0 auto;
   border: none;
   border-radius: 0;
   background: transparent;
   color: var(--text-dim);
-  padding: 11px 4px;
+  padding: 11px 13px;
   font-size: 12px;
+  white-space: nowrap;
   border-bottom: 2px solid transparent;
+}
+.tabs button:hover:not(.active) {
+  color: var(--text);
+  background: transparent;
 }
 .tabs button.active {
   color: var(--text);
@@ -719,7 +741,9 @@ input::placeholder {
 .decision-card .dc-head {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 10px;
+  row-gap: 8px;
   padding: 12px 14px;
   border-bottom: 1px solid var(--border-soft);
 }
@@ -761,6 +785,7 @@ input::placeholder {
   color: var(--text-faint);
   text-transform: uppercase;
   letter-spacing: 0.6px;
+  white-space: nowrap;
 }
 .dc-head-right {
   margin-left: auto;
@@ -1446,9 +1471,11 @@ a.exp-link:hover { color: var(--text); border-color: var(--accent-dim); }
 
   /* ---- topbar: keep one row, scroll horizontally, drop the chrome ---- */
   .topbar {
-    height: 48px;
+    height: calc(48px + env(safe-area-inset-top, 0px));
     gap: 10px;
-    padding: 0 10px;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-left: max(10px, env(safe-area-inset-left, 0px));
+    padding-right: max(10px, env(safe-area-inset-right, 0px));
     overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
@@ -1475,6 +1502,7 @@ a.exp-link:hover { color: var(--text); border-color: var(--accent-dim); }
     border-right: none;
     border-bottom: none;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
   }
 
   /* ---- right-panel: 10 tabs become a swipeable strip ---- */
@@ -1505,7 +1533,8 @@ a.exp-link:hover { color: var(--text); border-color: var(--accent-dim); }
   /* ---- bigger tap targets across the board ---- */
   button { min-height: 36px; }
   .seg button, button.tiny, .chip, .mkt-chip { min-height: 32px; }
-  input, select { min-height: 36px; font-size: 13px; }
+  /* 16px keeps iOS Safari from auto-zooming the page when a field is focused */
+  input, select { min-height: 36px; font-size: 16px; }
 
   /* ---- decision/stat grids breathe better on narrow screens ---- */
   .dc-grid, .stat-grid { grid-template-columns: 1fr 1fr; }
@@ -1528,6 +1557,8 @@ a.exp-link:hover { color: var(--text); border-color: var(--accent-dim); }
     border-top: 1px solid var(--border);
     background: linear-gradient(0deg, var(--bg), var(--bg-1));
     padding-bottom: env(safe-area-inset-bottom, 0);
+    padding-left: env(safe-area-inset-left, 0);
+    padding-right: env(safe-area-inset-right, 0);
   }
   .mobile-nav button {
     position: relative;
