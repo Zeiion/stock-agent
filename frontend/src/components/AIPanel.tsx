@@ -280,13 +280,16 @@ export default function AIPanel({
         >
           {thinking ? "分析中…" : "快速分析 " + (symbol ? short(symbol) : "")}
         </button>
+      </div>
+
+      <div className="analyze-actions">
         <button
           className="ghost deep-btn"
           onClick={() => onDeepAnalyze(strategy, debate)}
           disabled={!symbol || busy}
           title="多智能体深度分析：技术面 / 基本面 / 消息面 → 多空综合"
         >
-          {deepThinking ? "深度分析中…" : debate ? "🔬 深度分析·辩论" : "🔬 深度分析"}
+          {deepThinking ? "深度中…" : debate ? "深度·辩论" : "深度分析"}
         </button>
         <button
           className="ghost deep-btn"
@@ -294,7 +297,7 @@ export default function AIPanel({
           disabled={!symbol || busy}
           title="投资大师 Panel：多位大师并行研判 → 加权投票共识（ai-hedge-fund 式）"
         >
-          {panelBusy ? "大师投票中…" : "🎭 大师投票"}
+          {panelBusy ? "投票中…" : "大师投票"}
         </button>
         <button
           className="ghost deep-btn"
@@ -302,7 +305,7 @@ export default function AIPanel({
           disabled={batchRunning}
           title="并发分析全部自选股,完成后系统通知"
         >
-          {batchRunning ? `批量中 ${batch?.done}/${batch?.total}` : "📊 批量分析"}
+          {batchRunning ? `批量 ${batch?.done}/${batch?.total}` : "批量分析"}
         </button>
       </div>
 

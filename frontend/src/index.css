@@ -1200,8 +1200,20 @@ table.grid td {
 }
 
 /* =================== Intelligence + Portfolio panels =================== */
-.analyze-bar { display: flex; gap: 6px; flex-wrap: wrap; }
-.deep-btn { white-space: nowrap; }
+.analyze-bar { display: flex; gap: 6px; margin-bottom: 8px; }
+.analyze-bar .primary { flex: 1; white-space: nowrap; }
+/* secondary actions: one even 3-up row, never squeezing the primary CTA */
+.analyze-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.analyze-actions .deep-btn {
+  padding: 7px 6px;
+  font-size: 11.5px;
+}
+.deep-btn { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ghost.mini { padding: 2px 8px; font-size: 11px; }
 
 .analyst-panel { margin: 10px 0 4px; }
